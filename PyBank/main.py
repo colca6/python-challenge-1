@@ -4,33 +4,32 @@ import csv
 csvpath = os.path.join('PyBank','Resources','budget_data.csv')
 #csvpath = os.path.join('PyPoll','Resources','election_data.csv')
 
-#month = []
-#profit = []
-
 with open(csvpath) as csvfile:    #, #newline=""
 
     csvreader = csv.reader(csvfile, delimiter=',')
 
     csv_header = next(csvreader)
     firstrow = next(csvreader)
-    #next(csvreader, None)
-    #months = len(list(csvreader))
-    #print(f"There are " + str(months) + " months in this file")
+    #Lots of variables to create to store values
     total_months = 1
-    #total = int(firstrow[1])
     previous_profit = int(firstrow[1])
     total_change = 0
     greatest_increase = int(firstrow[1])
     greatest_decrease = int(firstrow[1])
     months = 0
-    #profit = 1
     profit = int(firstrow[1])
     
     for row in csvreader:
-        
+        #get total numbr of months
         total_months += 1
+        #As we loop through the recordset, add rows profit/loss to profit variable (add to running total)
         profit += int(row[1])
+        #need to calculate difference from month to month. loop keeps previous month's value in "previous_profit",
+        #so here you can subtract current month with previous month, the "difference" will be
+        #the increase or decrease
         difference = int(row[1]) - previous_profit
+        #Total change is from beginning to end, so add to running total, the difference value. Same with 
+        #average change, it grows, but when the for loop finishes, these variables will hold the final values.
         total_change += difference
         average_change = total_change/(total_months -1)
 
