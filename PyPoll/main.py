@@ -1,9 +1,9 @@
+#set up environment
 import os
 import csv
 
 #csvpath = os.path.join('PyBank','Resources','budget_data.csv')
-csvpath = os.path.join('PyPoll','Resources','election_data.csv')
-
+csvpath = os.path.join('Resources','election_data.csv')
 
 #List for holding Candidate names
 list_candidates = []
@@ -13,9 +13,9 @@ dict_candidates = {}
 #Use the relative path to open the appropriate file into a csv.reader object
 with open(csvpath, newline="") as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
-
+    #save column headers
     csv_header = next(csvreader)
-    #firstrow = next(csvreader)
+    
 
     #the csv file has 3 columns, Ballot ID, county, candidate. For this exercise, we only want the
     #candidate names, and since each row (1 row per ballot ID) represents 1 vote, number of rows per name.
@@ -44,26 +44,23 @@ with open(csvpath, newline="") as csvfile:
             #change in indentation), and "1" is added to the value.
             dict_candidates[name] = 0 
         dict_candidates[name] += 1
-        #The dict_candidates dictionary:
-        # {'Charles Casper Stockham': 85213, 'Diana DeGette': 272892, 'Raymon Anthony Doane': 11606}
-        #-----------------------------
 
-    #This returns the total votes by summing the values in dict_candidates.
-    #votes_per_cand = dict_candidates.values()
+    #for loop has now ended
+    #This returns the total votes by summing the (3) values in dict_candidates.
     votes_per_cand = sum(dict_candidates.values())
-    #This returns the maximum value in vote_dict. This is used to declare a winner.
+    #This returns the maximum value in dictionary in order to determine who won.
     winning_num = max(dict_candidates.values())
     #Use a list comprehension to return the key for winning_num variable.
-    winner = {i for i in dict_candidates if dict_candidates[i] == winning_num}
+    winner = {cand for cand in dict_candidates if dict_candidates[cand] == winning_num}
     
     #Print to terminal instructions
     print("Election Results")
     print("------------------------------------------")
     print(f"Total Votes:  {votes_per_cand}")
     print("------------------------------------------")
-    #The following loop uses the dictionary items() function
+    #The following loop uses the dictionary items() function to print the 3 candidates' info
     for key, value in dict_candidates.items():
-        
+        #"key" is candidate name, "value" is count of votes, round function to limit decimal places
         print(key,": ", round((int(value)/int(votes_per_cand))*100,3),"% (", value, ")")
 
     print("------------------------------------------")
@@ -71,88 +68,30 @@ with open(csvpath, newline="") as csvfile:
     #to casting as string. In any case, replace function works.
     print(f"Winner:  {str(winner)}".replace("{'","").replace("'}",""))
     print("------------------------------------------")
-    #print(dict_candidates)
 
 
-"""     for row in csvreader:
+    #Write out to text file instructions
+    #Note position of indentation. Also 'w' inside () indicates open file to write to it.
+#with open('analysis_results.txt', 'w') as file:
+outpath = os.path.join('Analysis','analysis_results.txt')
+
+
+#open text file to write into
+with open(outpath, 'w') as file:
+
+
+    #call write function.  '\n' makes it go to new line.
+    file.write("Election Results" + '\n')
+    file.write("------------------------------------------" + '\n')
+    file.write(f"Total Votes:  {votes_per_cand}" + '\n')
+    file.write("------------------------------------------" + '\n')
+    #The following loop uses the dictionary items() function to print the 3 candidates' info
+    for key, value in dict_candidates.items():
+        #"key" is candidate name, "value" is count of votes, round function to limit decimal places
+        file.write(str(key) + " : " + str(round((int(value)/int(votes_per_cand))*100,3)) + "% ( " +  str(value) + ")" + '\n')
         
-        total_votes += 1
-        name.append(row[2])
-        #Create set to get unique values
-        
-    for x in set(name):
-        candidate.append(x)
-        y = name.count(x)
-        #print(name)
-        vote_per_cand.append(y)
-
-        z = (y/total_votes)*100
-        percentage.append(z)
-
-
-    most_votes = max(vote_per_cand)
-    winner = candidate[vote_per_cand.index(most_votes)] """
-
-
-""" print("Total Votes :" + str(total_votes))
-print("-------------------------")
-for i in range(len(name)):
-            print(name[i] + ": " + str(round(percentage[i])) +"% (" + str(vote_per_cand[i])+ ")")
-print("-------------------------")
-print("The winner is: " + winner)
-print("-------------------------") """
-
-
-
-
-"""         curr_cand = str(row[2])
-        if curr_cand != candidate:
-            distinct_cand.append(curr_cand) """
-
-        
-
-"""         if difference > greatest_increase:
-            greatest_increase = difference
-            month_greatest_increase = row[0]
-        elif difference < greatest_decrease:
-            greatest_decrease = difference
-            month_greatest_decrease = row[0] """
-
-
-
-""" print(total_votes)
-print(curr_cand)
-print(candidate) """
-#print(distinct_cand)
-
-"""         def get_distinct_cand(csvreader):
-            distinct_cand = []
-            if candidate in csvreader:
-                continue
-            else:
-                distinct_cand.append(str(row[2]))
-            return distinct_cand """
-    
-
-
-
-    #print(distinct_cand)
-
-        #total = int(firstrow[1])
-    #previous_profit = int(firstrow[1])
-    #total_change = 0
-    #greatest_increase = int(firstrow[1])
-    #greatest_decrease = int(firstrow[1])
-    #months = 0
-    #profit = 1
-    #profit = int(firstrow[1])
-
-
-"""         total_votes = 1
-    candidate = str(firstrow[2])
-    most_votes = int(firstrow[0])
-    
-    distinct_cand = []
-    for candy in candidate:
-        distinct_cand.append(candy)
-    curr_cand = str(firstrow[2]) """
+    file.write("------------------------------------------" + '\n')
+    #Annoyingly, dictionary fields print funny, with curly brackets, in this case also single quotes which might be due
+    #to casting as string. In any case, replace function works.
+    file.write(f"Winner:  {str(winner)}".replace("{'","").replace("'}","") + '\n')
+    file.write("------------------------------------------")
