@@ -14,7 +14,7 @@ with open(csvpath) as csvfile:
     firstrow = next(csvreader)
 
     #Lots of variables to create to store values
-    total_months = 0
+    total_months = 1
     previous_profit = int(firstrow[1])
     total_change = 0
     greatest_increase = int(firstrow[1])
